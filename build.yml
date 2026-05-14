@@ -1,0 +1,44 @@
+name: Build ModernCard Extension
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Java 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Install Ant
+        run: sudo apt-get install -y ant
+
+      - name: Clone App Inventor sources
+        run: |
+          git clone --depth=1 https://github.com/mit-cml/appinventor-sources.git ai-sources
+          cd ai-sources
+          git submodule update --init
+
+      - name: Copy extension source into App Inventor
+        run: |
+          mkdir -p ai-sources/appinventor/components/src/com/myapp/moderncard
+          cp src/com/myapp/moderncard/ModernCard.java \
+             ai-sources/appinventor/components/src/com/myapp/moderncard/ModernCard.java
+
+      - name: Build extension
+        run: |
+          cd ai-sources/appinventor
+          ant extensions
+
+      - name: Find and upload AIX
+        uses: actions/upload-artifact@v4
+        with:
+          name: ModernCard-extension
+          path: ai-sources/appinventor/components/build/extensions/*.aix
