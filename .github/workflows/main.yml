@@ -29,15 +29,14 @@ jobs:
       - name: Copy extension source into App Inventor
         run: |
           mkdir -p ai-sources/appinventor/components/src/com/myapp/moderncard
-          cp src/com/myapp/moderncard/ModernCard.java \
-             ai-sources/appinventor/components/src/com/myapp/moderncard/ModernCard.java
+          find . -name "ModernCard.java" -exec cp {} ai-sources/appinventor/components/src/com/myapp/moderncard/ModernCard.java \;
 
       - name: Build extension
         run: |
           cd ai-sources/appinventor
           ant extensions
 
-      - name: Find and upload AIX
+      - name: Upload AIX
         uses: actions/upload-artifact@v4
         with:
           name: ModernCard-extension
