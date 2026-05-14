@@ -29,7 +29,7 @@ jobs:
       - name: Copy extension source into App Inventor
         run: |
           mkdir -p ai-sources/appinventor/components/src/com/myapp/moderncard
-          find . -name "ModernCard.java" -exec cp {} ai-sources/appinventor/components/src/com/myapp/moderncard/ModernCard.java \;
+          cp ModernCard.java ai-sources/appinventor/components/src/com/myapp/moderncard/ModernCard.java
 
       - name: Build extension
         run: |
